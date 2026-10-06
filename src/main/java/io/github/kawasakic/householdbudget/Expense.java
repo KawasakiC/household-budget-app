@@ -17,6 +17,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+//expensesテーブルをJavaから扱うためのクラス
 @Entity
 @Table(name = "expenses")
 public class Expense {

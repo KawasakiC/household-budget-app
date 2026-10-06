@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>支出一覧</title>
+</head>
+<body>
+    <h1>支出一覧</h1>
+
+    <p>
+        <a th:href="@{/expenses/new}">支出を登録する</a>
+    </p>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>支出日</th>
+                <th>金額</th>
+                <th>カテゴリ</th>
+                <th>支払方法</th>
+                <th>店舗</th>
+                <th>メモ</th>
+                <th>満足度</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:if="${#lists.isEmpty(expenses)}">
+                <td colspan="7">支出データはまだありません。</td>
+            </tr>
+
+            <tr th:each="expense : ${expenses}">
+                <td th:text="${expense.expenseDate}"></td>
+                <td th:text="${expense.amount} + ' 円'"></td>
+                <td th:text="${categoryNames[expense.categoryId]}"></td>
+                <td th:text="${paymentMethodNames[expense.paymentMethodId]}"></td>
+                <td th:text="${expense.store}"></td>
+                <td th:text="${expense.memo}"></td>
+                <td th:text="${expense.satisfaction == 5 ? '大満足' : (expense.satisfaction == 4 ? '満足' : (expense.satisfaction == 3 ? 'まぁまぁ' : (expense.satisfaction == 2 ? 'ちょっと不満' : '不満')))}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

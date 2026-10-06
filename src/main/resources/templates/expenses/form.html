@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>支出登録</title>
+</head>
+<body>
+    <h1>支出登録</h1>
+
+    <form th:action="@{/expenses}" th:object="${expense}" method="post">
+
+        <div>
+            <label for="expenseDate">支出日</label>
+            <input type="date" th:field="*{expenseDate}" required>
+            <span th:errors="*{expenseDate}"></span>
+        </div>
+
+        <div>
+            <label for="amount">金額</label>
+            <input type="number" th:field="*{amount}" min="1" step="1" required>
+            <span>円</span>
+            <span th:errors="*{amount}"></span>
+        </div>
+
+        <div>
+            <label for="categoryId">カテゴリ</label>
+            <select th:field="*{categoryId}" required>
+                <option value="">選択してください</option>
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}">
+                </option>
+            </select>
+            <span th:errors="*{categoryId}"></span>
+        </div>
+
+        <div>
+            <label for="paymentMethodId">支払方法</label>
+            <select th:field="*{paymentMethodId}" required>
+                <option value="">選択してください</option>
+                <option th:each="paymentMethod : ${paymentMethods}"
+                        th:value="${paymentMethod.id}"
+                        th:text="${paymentMethod.name}">
+                </option>
+            </select>
+            <span th:errors="*{paymentMethodId}"></span>
+        </div>
+
+        <div>
+            <label for="store">店舗</label>
+            <input type="text" th:field="*{store}" maxlength="100">
+            <span th:errors="*{store}"></span>
+        </div>
+
+        <div>
+            <label for="memo">メモ</label>
+            <textarea th:field="*{memo}" maxlength="500"></textarea>
+            <span th:errors="*{memo}"></span>
+        </div>
+
+        <div>
+            <label for="satisfaction">満足度</label>
+            <select th:field="*{satisfaction}" required>
+                <option value="">選択してください</option>
+ 				<option value="5">大満足</option>
+				<option value="4">満足</option>
+                <option value="3">まぁまぁ</option>
+                <option value="2">ちょっと後悔</option>
+                <option value="1">後悔</option>
+            </select>
+            <span th:errors="*{satisfaction}"></span>
+        </div>
+
+        <button type="submit">登録</button>
+    </form>
+</body>
+</html>
