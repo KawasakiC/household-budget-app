@@ -1,5 +1,7 @@
 package io.github.kawasakic.householdbudget.service;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,5 +47,15 @@ public class ExpenseService {
     @Transactional
     public void deleteById(Long id) {
         expenseRepository.deleteById(id);
+    }
+    
+    // 指定した月の支出を、支出日の昇順で取得する
+    @Transactional(readOnly = true)
+    public List<Expense> findByMonth(YearMonth month) {
+        // 指定月の初日と末日を検索範囲にする
+        LocalDate startDate = month.atDay(1);
+        LocalDate endDate = month.atEndOfMonth();
+
+        return expenseRepository.findByExpenseDateBetweenOrderByExpenseDateAsc(startDate, endDate);
     }
 }

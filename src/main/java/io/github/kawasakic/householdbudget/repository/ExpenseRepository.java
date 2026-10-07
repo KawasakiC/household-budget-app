@@ -1,5 +1,8 @@
 package io.github.kawasakic.householdbudget.repository;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import io.github.kawasakic.householdbudget.Expense;
@@ -8,4 +11,9 @@ import io.github.kawasakic.householdbudget.Expense;
 //JpaRepositoryが基本的なDB操作を用意してくれる
 //<Expense, Long> は、扱うクラスがExpense、IDの型がLongという意味
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
+
+	List<Expense> findByExpenseDateBetweenOrderByExpenseDateAsc(
+	        LocalDate startDate,
+	        LocalDate endDate);
+
 }

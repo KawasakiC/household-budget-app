@@ -1,0 +1,29 @@
+@charset "UTF-8";.action-button {
+    display: inline-block;
+    padding: 3px 6px;
+    border: 1px solid #666;
+    border-radius: 4px;
+    background-color: #f2f2f2;
+    color: #222;
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.delete-form {
+    display: inline;
+}
+
+.cancel-button {
+    margin-left: 8px;
+}
+
+.category-summary {
+    table-layout: fixed;
+    width: 500px;
+}
+
+.category-summary th,
+.category-summary td {
+    width: 70px;
+}

@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{fragments/header :: commonHeader}"></div>
+
 <head>
     <meta charset="UTF-8">
     <title>支出登録</title>
+	<script th:src="@{/js/expense-form-validation.js}" defer></script>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
     <h1>支出登録</h1>
 
     <form th:action="@{/expenses}" th:object="${expense}" method="post">
+		<input type="hidden" th:field="*{id}">
 
         <div>
             <label for="expenseDate">支出日</label>
             <input type="date" th:field="*{expenseDate}" required>
             <span th:errors="*{expenseDate}"></span>
-        </div>
+       </div>
 
         <div>
             <label for="amount">金額</label>
@@ -71,7 +77,13 @@
             <span th:errors="*{satisfaction}"></span>
         </div>
 
-        <button type="submit">登録</button>
+		<br>
+		
+        <button class="action-button" type="submit">登録</button>
+		<a class="action-button cancel-button" th:href="@{/expenses}">
+			キャンセル
+		</a>
+		</a>
     </form>
 </body>
 </html>

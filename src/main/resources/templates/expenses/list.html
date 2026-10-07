@@ -1,15 +1,58 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{fragments/header :: commonHeader}"></div>
+
 <head>
     <meta charset="UTF-8">
     <title>支出一覧</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
     <h1>支出一覧</h1>
-
+	
+	<form th:action="@{/expenses}" method="get">
+	    <select id="month" name="month">
+			<option th:each="monthOption : ${months}"
+			        th:value="${monthOption}"
+			        th:text="${#temporals.format(monthOption, 'yyyy年M月')}"
+			        th:selected="${monthOption.toString() == selectedMonth}">
+			</option>
+		</select>
+	    <button type="submit">表示</button>
+	</form>
     <p>
         <a th:href="@{/expenses/new}">支出を登録する</a>
     </p>
+	
+	<p th:if="${errorMessage}" th:text="${errorMessage}"></p>
+
+		
+	<table class="category-summary" border="1">
+		    <thead>
+		        <tr>
+		            <th>カテゴリ</th>
+		            <th th:each="category : ${categories}"
+		                th:text="${category.name}"></th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		        <tr>
+		            <th>支出金額</th>
+		            <td th:each="category : ${categories}"
+		                th:text="${categoryTotals[category.id]} + ' 円'">0</td>
+		        </tr>
+				<tr>
+				    <th>残金</th>
+				    <td th:each="category : ${categories}"
+				        th:text="${categoryRemaining[category.id] != null
+				            ? categoryRemaining[category.id] + '円'
+				            : '-'}">-</td>
+				</tr>
+			</tbody>
+		</table>	
+
+	<p>支出合計：<span th:text="${monthlyTotal}"></span>円</p>
 
     <table border="1">
         <thead>
@@ -36,6 +79,18 @@
                 <td th:text="${expense.store}"></td>
                 <td th:text="${expense.memo}"></td>
                 <td th:text="${expense.satisfaction == 5 ? '大満足' : (expense.satisfaction == 4 ? '満足' : (expense.satisfaction == 3 ? 'まぁまぁ' : (expense.satisfaction == 2 ? 'ちょっと不満' : '不満')))}"></td>
+				<td>
+					<a class="action-button" th:href="@{/expenses/{id}/edit(id=${expense.id})}">
+						編集
+					</a>
+				</td>
+				<td>
+					<form class="delete-form" th:action="@{/expenses/{id}/delete(id=${expense.id})}"method="post">
+						<button class="action-button" type="submit">
+							削除
+						</button>
+					</form>
+				</td>
             </tr>
         </tbody>
     </table>
