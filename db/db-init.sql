@@ -27,10 +27,10 @@ INSERT INTO categories (
 )
 VALUES
     ('食費', 'WEEKLY', 7500),
-    ('日用品', 'FIXED', NULL),
-    ('車', 'FIXED', NULL),
-    ('医療費', 'FIXED', NULL),
-    ('娯楽費', 'FIXED', NULL);
+    ('日用品', 'FIXED', 20000),
+    ('車', 'FIXED', 10000),
+    ('医療費', 'FIXED', 10000),
+    ('娯楽費', 'FIXED', 10000);
 
 **********************************************
 

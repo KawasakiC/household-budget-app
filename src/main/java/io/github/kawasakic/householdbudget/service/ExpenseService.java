@@ -2,6 +2,7 @@ package io.github.kawasakic.householdbudget.service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,5 +58,24 @@ public class ExpenseService {
         LocalDate endDate = month.atEndOfMonth();
 
         return expenseRepository.findByExpenseDateBetweenOrderByExpenseDateAsc(startDate, endDate);
+    }
+    
+    // 指定月の支出から、満足度3以上の上位3件を取得する
+    @Transactional(readOnly = true)
+    public List<Expense> findTop3GoodExpensesByMonth(YearMonth month) {
+        return findByMonth(month).stream()
+                // 「使ってよかった」として満足度3以上に絞る
+                .filter(expense -> expense.getSatisfaction() >= 3)
+                // 満足度の高い順、同じ満足度なら支出日の新しい順に並べる
+                .sorted(
+                        Comparator.comparing(Expense::getSatisfaction).reversed()
+                                .thenComparing(
+                                        Expense::getExpenseDate,
+                                        Comparator.reverseOrder()
+                                )
+                )
+                // 上位3件だけにする
+                .limit(3)
+                .toList();
     }
 }

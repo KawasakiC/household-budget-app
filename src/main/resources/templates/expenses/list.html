@@ -21,6 +21,23 @@
 		</select>
 	    <button type="submit">表示</button>
 	</form>
+	
+	<section>
+	    <h2>今月の使ってよかった</h2>
+
+		<div class="ranking-item" th:each="expense : ${topGoodExpenses}">
+		    <span class="ranking-stars">
+		        <span th:each="star : ${#numbers.sequence(1, expense.satisfaction)}">★</span>
+		    </span>
+
+		    <span class="ranking-amount"
+		          th:text="${expense.amount} + '円'"></span>
+
+		    <span class="ranking-memo"
+		          th:text="${expense.memo}"></span>
+		</div>
+	</section>
+	
     <p>
         <a th:href="@{/expenses/new}">支出を登録する</a>
     </p>
