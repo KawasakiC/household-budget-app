@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{fragments/header :: commonHeader}"></div>
+
+<head>
+    <meta charset="UTF-8">
+    <title>予算設定</title>
+	<script th:src="@{/js/budget-form.js}" defer></script>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <h1>予算設定</h1>
+
+	<a>対象月</a>
+	<form th:action="@{/budgets}" method="get">
+	    <select id="month" name="month">
+			<option th:each="monthOption : ${months}"
+			        th:value="${monthOption}"
+			        th:text="${#temporals.format(monthOption, 'yyyy年M月')}"
+			        th:selected="${monthOption.toString() == selectedMonth}">
+			</option>
+		</select>
+	    <button type="submit">表示</button>
+	</form>
+	
+	<br>
+		
+	<form th:action="@{/budgets/calculate}" th:object="${budgetForm}" method="post">
+
+		<input type="hidden" th:field="*{month}">
+		
+		<button class="action-button" type="submit">自動計算</button>
+		
+		<table>
+		    <thead>
+		        <tr>
+		            <th>カテゴリ</th>
+		            <th>予算額</th>
+					<th></th>
+		        </tr>
+		    </thead>
+			<tbody>
+				<tr th:each="row, status : ${budgetForm.budgets}">
+                    <td>
+                        <span th:text="${row.categoryName}"></span>
+
+                        <input type="hidden"
+                               th:field="*{budgets[__${status.index}__].categoryId}">
+                    </td>
+                    <td>
+                        <input class="budget-amount" type="number"
+                               min="1"
+                               step="1"
+                               th:field="*{budgets[__${status.index}__].budgetAmount}">
+                    </td>
+					<td>
+						<span th:errors="*{budgets[__${status.index}__].budgetAmount}"></span>
+					</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>合計</th>
+                    <td id="totalBudget" 
+						th:text="${totalBudget != null ? totalBudget + '円' : '-'}">0</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <button class="action-button" type="submit" th:formaction="@{/budgets/confirm}">
+			予算を確定する
+		</button>
+    </form>
+</body>
+</html>
