@@ -58,7 +58,8 @@ VALUES
     ('ららぽ'),
     ('ヨドバシ'),
     ('PayPay'),
-    ('現金');
+    ('現金'),
+    ('その他');
 
 **********************************************
 
@@ -136,5 +137,36 @@ COMMENT ON COLUMN expenses.memo IS 'メモ';
 COMMENT ON COLUMN expenses.satisfaction IS '支出に対する満足度';
 COMMENT ON COLUMN expenses.created_at IS '作成日時';
 COMMENT ON COLUMN expenses.updated_at IS '更新日時';
+
+**********************************************
+
+-- 満足度管理テーブル作成
+CREATE TABLE satisfaction (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    score SMALLINT NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+COMMENT ON TABLE satisfaction IS '満足度管理テーブル';
+
+COMMENT ON COLUMN satisfaction.id IS '満足度ID';
+COMMENT ON COLUMN satisfaction.name IS '満足度名';
+COMMENT ON COLUMN satisfaction.score IS '満足度得点';
+COMMENT ON COLUMN satisfaction.created_at IS '作成日時';
+COMMENT ON COLUMN satisfaction.updated_at IS '更新日時';
+
+-- 初期データ登録
+INSERT INTO satisfaction (
+    name,
+    score
+)
+VALUES
+    ('大満足', 5),
+    ('満足', 4),
+    ('まぁまぁ', 3),
+    ('ちょっと不満', 2),
+    ('不満', 1);
 
 **********************************************

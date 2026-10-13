@@ -8,6 +8,7 @@
     font: inherit;
     text-decoration: none;
     cursor: pointer;
+	margin-right: 10px;
 }
 
 .delete-form {
@@ -33,4 +34,34 @@
     grid-template-columns: 6rem 7rem 1fr;
     column-gap: 8px;
     align-items: center;
+}
+
+.monthly-summary {
+    display: flex;
+    gap: 16px;
+	margin-top: 20px;
+}
+
+.summary-card {
+    box-sizing: border-box;
+    width: 180px;
+    padding: 12px;
+    border: 1px solid #333;
+    border-radius: 8px;
+}
+
+.summary-card h2 {
+    margin: 0 0 8px;
+    font-size: 16px;
+}
+
+.summary-value {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.category-remaining-table,
+.food-remain-card {
+    margin-left: 20px;
 }

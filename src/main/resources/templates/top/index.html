@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="~{fragments/header :: commonHeader}"></div>
+
+<head>
+    <meta charset="UTF-8">
+    <title>家計簿トップページ</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+	<h1 th:text="${currentMonth.year + '年' + currentMonth.monthValue + '月家計簿'}"></h1>
+	
+	<a th:href="@{/budgets}" class="action-button button">予算設定</a>
+	
+	<br><br>
+	
+	<section class="monthly-summary">
+		<div class="summary-card">
+		    <h2>支出合計</h2>
+		    <p class="summary-value"
+		       th:text="${#numbers.formatInteger(totalExpense, 1, 'COMMA') + '円'}">0</p>
+		</div>
+		
+	    <div class="summary-card">
+	        <h2>今月の残金</h2>
+	        <p class="summary-value"
+	           th:text="${remainingAmount == null
+	               ? '-'
+	               : #numbers.formatInteger(remainingAmount, 1, 'COMMA') + '円'}">0</p>
+	    </div>
+
+	    <div class="summary-card">
+	        <h2>残り日数</h2>
+	        <p class="summary-value" th:text="${remainingDays + '日'}">0</p>
+	    </div>
+	</section>
+	
+	<br><br>
+	
+	<a th:href="@{/expenses/new}" class="action-button button">支出を登録</a>	
+	<a th:href="@{/expenses}" class="action-button button">支出一覧</a>
+	
+	<h3>-- カテゴリ別残金 --</h3>
+	<table class="category-remaining-table" border="1">
+		    <thead>
+		        <tr>
+		            <th>カテゴリ</th>
+		            <th th:each="category : ${categories}"
+		                th:text="${category.name}"></th>
+		        </tr>
+		    </thead>
+			<tbody>
+				<tr>
+				    <th>残金</th>
+				    <td th:each="category : ${categories}"
+				        th:text="${categoryRemaining[category.id] != null
+				            ? categoryRemaining[category.id] + '円'
+				            : '-'}">-</td>
+				</tr>
+			</tbody>
+	</table>
+	
+	<section class="monthly-summary">
+	<div class="summary-card food-remain-card">
+	    <h2>食費の週予算</h2>
+	    <p class="summary-value"
+	       th:text="${weeklyFoodBudget == null
+	           ? '-'
+	           : #numbers.formatInteger(weeklyFoodBudget, 1, 'COMMA') + '円'}">0</p>
+	</div>
+	</section>
+	
+	<br>
+	
+	<section>
+		<h3>-- 今月の満足度 --</h3>
+		
+		<p th:if="${satisfactionPercent != null}"
+		   th:text="${satisfactionPercent} + '%'">
+		</p>
+	
+		<p th:if="${satisfactionComment != null}"
+		   th:text="${satisfactionComment}">
+		</p>
+	
+		<p th:if="${satisfactionPercent == null}">
+		  今月の支出データはありません。
+		</p>
+		
+		  <h3>-- ちょっと気になるカテゴリ --</h3>
+
+		  <div th:if="${lowestCategoryName != null}">
+		    <p th:text="${lowestCategoryName + '：' + lowestCategoryPercent + '%'}"></p>
+		    <p>このカテゴリは満足度が少し低めでした。支出を振り返ってみましょう。</p>
+		  </div>
+
+		  <p th:if="${lowestCategoryName == null}">
+		    今月は気になるカテゴリはありません。
+		  </p>
+		</section>
+
+</body>
+</html>
