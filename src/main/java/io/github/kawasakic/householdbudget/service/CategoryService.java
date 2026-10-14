@@ -25,4 +25,10 @@ public class CategoryService {
     public List<Category> findAll() {
         return categoryRepository.findAll();
     }
+    
+    // 送られてきた選択肢の存在確認
+    @Transactional(readOnly = true)
+    public boolean existsById(Long id) {
+        return categoryRepository.existsById(id);
+    }
 }

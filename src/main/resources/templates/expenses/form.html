@@ -37,8 +37,8 @@
                         th:text="${category.name}">
                 </option>
             </select>
-            <span th:errors="*{categoryId}"></span>
-        </div>
+            <span th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></span>
+		</div>
 
         <div>
             <label for="paymentMethodId">支払方法</label>
@@ -49,18 +49,18 @@
                         th:text="${paymentMethod.name}">
                 </option>
             </select>
-            <span th:errors="*{paymentMethodId}"></span>
+            <span th:if="${#fields.hasErrors('paymentMethodId')}" th:errors="*{paymentMethodId}"></span>
         </div>
 
         <div>
             <label for="store">店舗</label>
-            <input type="text" th:field="*{store}" maxlength="100">
+            <input type="text" th:field="*{store}">
             <span th:errors="*{store}"></span>
         </div>
 
         <div>
             <label for="memo">メモ</label>
-            <textarea th:field="*{memo}" maxlength="500"></textarea>
+            <textarea type="text" th:field="*{memo}"></textarea>
             <span th:errors="*{memo}"></span>
         </div>
 

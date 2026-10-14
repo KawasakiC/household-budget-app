@@ -24,6 +24,10 @@
 	
 	<section>
 	    <h2>今月の使ってよかった</h2>
+		
+		<p th:if="${#lists.isEmpty(topGoodExpenses)}">
+		    支出データはまだありません。
+		</p>
 
 		<div class="ranking-item" th:each="expense : ${topGoodExpenses}">
 		    <span class="ranking-stars">

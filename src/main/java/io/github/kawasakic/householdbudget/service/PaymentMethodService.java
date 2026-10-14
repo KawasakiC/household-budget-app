@@ -25,4 +25,10 @@ public class PaymentMethodService {
     public List<PaymentMethod> findAll() {
         return paymentMethodRepository.findAll();
     }
+    
+    // 送られてきた選択肢の存在確認
+    @Transactional(readOnly = true)
+    public boolean existsById(Long id) {
+        return paymentMethodRepository.existsById(id);
+    }
 }

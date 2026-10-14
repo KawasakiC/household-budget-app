@@ -6,7 +6,7 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 // 予算設定画面の入力内容を受け取るクラス
 public class BudgetForm {
@@ -43,7 +43,7 @@ public class BudgetForm {
         private String categoryName;
         
         @NotNull(message = "予算額を入力してください。")
-        @Positive(message = "予算額は0円より大きい値を入力してください。")
+        @PositiveOrZero(message = "予算額は0円以上で入力してください。")
         private BigDecimal budgetAmount;
 
         public Long getCategoryId() {

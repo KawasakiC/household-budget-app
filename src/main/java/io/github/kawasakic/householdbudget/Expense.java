@@ -16,6 +16,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -52,11 +53,13 @@ public class Expense {
     private Long paymentMethodId;
 
     // 店舗名を保持するフィールド
+    @Size(max = 100, message = "店舗名は100文字以内で入力してください。")
     @Column(length = 100)
     private String store;
 
     // メモを保持するフィールド
-    @Column(length = 500)
+    @Size(max = 250, message = "メモは250文字以内で入力してください。")
+    @Column(length = 250)
     private String memo;
 
     // 支出に対する満足度を保持するフィールド
