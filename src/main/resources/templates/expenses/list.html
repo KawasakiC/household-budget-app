@@ -10,7 +10,11 @@
 </head>
 <body>
     <h1>支出一覧</h1>
+
+	<a th:href="@{/}" class="action-button button">トップページ</a>
 	
+	<br><br>
+		
 	<form th:action="@{/expenses}" method="get">
 	    <select id="month" name="month">
 			<option th:each="monthOption : ${months}"

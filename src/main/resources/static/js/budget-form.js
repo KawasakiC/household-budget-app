@@ -30,26 +30,31 @@ const budgetForm = document.getElementById("budget-form");
 const budgetInputs = document.querySelectorAll(".budget-amount");
 
 budgetForm.addEventListener("submit", (event) => {
-  let hasError = false;
-
-  budgetInputs.forEach((input) => {
-    input.setCustomValidity("");
-
-	if (input.value === "") {
-	  input.setCustomValidity("予算額を入力してください。");
-	  hasError = true;
-	} else if (Number(input.value) < 0) {
-	  input.setCustomValidity("予算額は0円以上で入力してください。");
-	  hasError = true;
+	// 自動計算ボタンの場合は予算額の入力チェックをしない
+	if (event.submitter?.value === "calculate") {
+	  return;
 	}
-  });
+	
+	let hasError = false;
 
-  if (hasError) {
-    event.preventDefault();
+	budgetInputs.forEach((input) => {
+    	input.setCustomValidity("");
 
-    // エラーになった欄のメッセージを表示
-    budgetForm.reportValidity();
-  }
+		if (input.value === "") {
+			input.setCustomValidity("予算額を入力してください。");
+			hasError = true;
+		} else if (Number(input.value) < 0) {
+			input.setCustomValidity("予算額は0円以上で入力してください。");
+	  		hasError = true;
+  		}
+	});
+
+	if (hasError) {
+	    event.preventDefault();
+
+    	// エラーになった欄のメッセージを表示
+		budgetForm.reportValidity();
+	}
 });
 
 // 入力を修正したら、独自エラーを解除する

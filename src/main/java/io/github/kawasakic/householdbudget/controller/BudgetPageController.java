@@ -163,13 +163,15 @@ public class BudgetPageController {
         }
         model.addAttribute("months", months);
 
-        // 合計金額を計算する
-        BigDecimal totalBudget = BigDecimal.ZERO;
-        for (BudgetForm.BudgetRow row : rows) {
-            totalBudget = totalBudget.add(row.getBudgetAmount());
-        }
-        model.addAttribute("totalBudget", totalBudget);
+        // 各行の予算額をServiceに渡す
+        List<BigDecimal> amounts = rows.stream()
+                .map(BudgetForm.BudgetRow::getBudgetAmount)
+                .toList();
 
+        // 合計金額を計算して画面へ渡す
+        BigDecimal totalBudget = budgetService.calculateTotalBudget(amounts);
+        model.addAttribute("totalBudget", totalBudget);
+        
         return "budgets/form";
     }
     

@@ -11,7 +11,7 @@
 </head>
 <body>
     <h1>予算設定</h1>
-
+	
 	<a>対象月</a>
 	<form th:action="@{/budgets}" method="get">
 	    <select id="month" name="month">
@@ -30,7 +30,9 @@
 
 		<input type="hidden" th:field="*{month}">
 		
-		<button class="action-button" type="submit">自動計算</button>
+		<button class="action-button" type="submit" name="action" value="calculate">
+			自動計算
+		</button>
 		
 		<table>
 		    <thead>
@@ -68,9 +70,14 @@
             </tfoot>
         </table>
 
-        <button class="action-button" type="submit" th:formaction="@{/budgets/confirm}">
+        <button class="action-button" type="submit" name="action" value="confirm" th:formaction="@{/budgets/confirm}">
 			予算を確定する
 		</button>
     </form>
+
+	<br>
+	
+	<a th:href="@{/}" class="action-button button">トップページ</a>
+
 </body>
 </html>

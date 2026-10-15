@@ -1,14 +1,18 @@
 package io.github.kawasakic.householdbudget.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.github.kawasakic.householdbudget.Category;
 import io.github.kawasakic.householdbudget.Expense;
 import io.github.kawasakic.householdbudget.repository.ExpenseRepository;
 
@@ -77,5 +81,36 @@ public class ExpenseService {
                 // 上位3件だけにする
                 .limit(3)
                 .toList();
+    }
+    
+    // カテゴリIDごとの支出金額を合計する
+    public Map<Long, BigDecimal> calculateCategoryTotals(
+            List<Category> categories,
+            List<Expense> expenses) {
+
+        Map<Long, BigDecimal> categoryTotals = new HashMap<>();
+
+        // すべてのカテゴリを0円で初期化する
+        for (Category category : categories) {
+            categoryTotals.put(category.getId(), BigDecimal.ZERO);
+        }
+
+        // 支出があるカテゴリには金額を加算する
+        for (Expense expense : expenses) {
+            categoryTotals.merge(
+                    expense.getCategoryId(),
+                    expense.getAmount(),
+                    BigDecimal::add
+            );
+        }
+
+        return categoryTotals;
+    }
+    
+    // 月の支出金額を合計する
+    public BigDecimal calculateTotalAmount(List<Expense> expenses) {
+        return expenses.stream()
+                .map(Expense::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

@@ -5,9 +5,11 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -132,5 +134,89 @@ public class BudgetService {
         }
 
         return savedBudgets;
+    }
+    
+    // カテゴリごとの残金を計算する
+    public Map<Long, BigDecimal> calculateCategoryRemaining(
+            List<Category> categories,
+            List<Budget> monthlyBudgets,
+            Map<Long, BigDecimal> categoryTotals) {
+
+        // カテゴリIDから、確定済み予算額を取得できるMapを作る
+        Map<Long, BigDecimal> monthlyBudgetAmounts = new HashMap<>();
+
+        for (Budget budget : monthlyBudgets) {
+            // 未確定の予算は残金計算に使わない
+            if (budget.isConfirmed()) {
+                monthlyBudgetAmounts.put(
+                        budget.getCategoryId(),
+                        budget.getBudgetAmount()
+                );
+            }
+        }
+
+        // 予算額から支出合計を引いた残金を計算する
+        Map<Long, BigDecimal> categoryRemaining = new HashMap<>();
+
+        for (Category category : categories) {
+            BigDecimal budget = monthlyBudgetAmounts.get(category.getId());
+
+            // 確定済みの予算があるカテゴリだけ計算する
+            if (budget != null) {
+                BigDecimal spent = categoryTotals.getOrDefault(
+                        category.getId(),
+                        BigDecimal.ZERO
+                );
+
+                categoryRemaining.put(
+                        category.getId(),
+                        budget.subtract(spent)
+                );
+            }
+        }
+
+        return categoryRemaining;
+    }
+    
+    // 確定済みの予算が1件以上あるか確認する
+    public boolean hasConfirmedBudget(List<Budget> budgets) {
+        return budgets.stream()
+                .anyMatch(Budget::isConfirmed);
+    }
+
+    // 確定済み予算の金額だけを合計する
+    public BigDecimal calculateConfirmedTotal(List<Budget> budgets) {
+        return budgets.stream()
+                .filter(Budget::isConfirmed)
+                .map(Budget::getBudgetAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    // 確定済み予算がある場合、予算合計から支出合計を引いて残金を計算する
+    public BigDecimal calculateRemainingAmount(
+            List<Budget> budgets,
+            BigDecimal totalExpense) {
+
+        // 確定済み予算がなければ、残金は未設定とする
+        if (!hasConfirmedBudget(budgets)) {
+            return null;
+        }
+
+        return calculateConfirmedTotal(budgets).subtract(totalExpense);
+    }
+    
+    // 入力された予算額を合計する。すべて未入力ならnullを返す
+    public BigDecimal calculateTotalBudget(List<BigDecimal> amounts) {
+        boolean allAmountsEmpty = amounts.stream()
+                .allMatch(Objects::isNull);
+
+        if (allAmountsEmpty) {
+            return null;
+        }
+
+        // 未入力の欄は0円として合計する
+        return amounts.stream()
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

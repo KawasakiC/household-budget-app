@@ -25,9 +25,12 @@
 	    <div class="summary-card">
 	        <h2>今月の残金</h2>
 	        <p class="summary-value"
-	           th:text="${remainingAmount == null
-	               ? '-'
-	               : #numbers.formatInteger(remainingAmount, 1, 'COMMA') + '円'}">0</p>
+			   th:if="${remainingAmount != null}"
+	           th:text="${#numbers.formatInteger(remainingAmount, 1, 'COMMA') + '円'}">0</p>
+			   
+			<p th:if="${remainingAmount == null}">
+				予算が設定されていません。
+			</p>
 	    </div>
 
 	    <div class="summary-card">
@@ -88,17 +91,17 @@
 		  今月の支出データはありません。
 		</p>
 		
-		  <h3>-- ちょっと気になるカテゴリ --</h3>
+		<h3>-- ちょっと気になるカテゴリ --</h3>
 
-		  <div th:if="${lowestCategoryName != null}">
-		    <p th:text="${lowestCategoryName + '：' + lowestCategoryPercent + '%'}"></p>
-		    <p>このカテゴリは満足度が少し低めでした。支出を振り返ってみましょう。</p>
-		  </div>
+		<div th:if="${!#lists.isEmpty(lowestCategoryNames)}">
+		    <p th:text="${lowestCategoryNamesText + '：' + lowestCategoryPercent + '%'}"></p>
+		    <p>該当カテゴリは満足度が少し低めでした。支出を振り返ってみましょう。</p>
+		</div>
 
-		  <p th:if="${lowestCategoryName == null}">
+		<p th:if="${#lists.isEmpty(lowestCategoryNames)}">
 		    今月は気になるカテゴリはありません。
-		  </p>
-		</section>
+		</p>
+	</section>
 
 </body>
 </html>
