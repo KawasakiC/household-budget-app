@@ -124,7 +124,7 @@ public class TopPageService {
 	            lowestCategoryNames.clear();
 	            lowestCategoryNames.add(category.getName());
 	            
-	        } else if (percent == lowestPercent) {
+	        } else if (percent < 60 && percent == lowestPercent) {
 	        	// 最低値と同じなら、名前を追加する
 	            lowestCategoryNames.add(category.getName());
 	        }
