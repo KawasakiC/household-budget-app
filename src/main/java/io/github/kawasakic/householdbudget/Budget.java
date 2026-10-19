@@ -13,7 +13,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -40,7 +40,7 @@ public class Budget {
 
     // 予算金額を保持するフィールド
     @NotNull(message = "金額を入力してください。")
-    @Positive(message = "金額は0円より大きい値を入力してください。")
+    @PositiveOrZero(message = "金額は0円以上で入力してください。")
     @Column(name = "budget_amount", nullable = false, precision = 10, scale = 0)
     private BigDecimal budgetAmount;
 
